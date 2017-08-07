@@ -1,0 +1,29 @@
+#rootwizard {
+  margin: 5%;
+}
+
+.fa {
+  line-height: inherit;
+}
+
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+.tent-calc-item, .container-fluid {
+  min-width: 200px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+@media (min-width: 768px) {
+  .tent-calc-item {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+.pager {
+  clear: both;
+}
