@@ -117,11 +117,10 @@ function generateGroupOptions(itemGroup) {
 
 function populateResultsTab() {
 	var tab = $('#resultsTab');
+	var result = "";
 
 	var tentSpaceNeeded = 0;
 	items.forEach(function(item) { tentSpaceNeeded += item.getSpaceRequired(); });
-
-	console.log('populate w: ' + tentSpaceNeeded);
 
 	result += `
 		<div class="jumbotron">
@@ -129,8 +128,6 @@ function populateResultsTab() {
 			<p>See the recommended products below or begin a free quote now with some pre-selected items based on your entries!</p>
 		</div>
 		`;
-
-	
 
 	tab.html(result);
 }
