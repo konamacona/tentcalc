@@ -1,5 +1,3 @@
-
-// My shit
 var ITEM_GROUP = {
 	SEATING: 'Seating',
 	OTHER_TABLES: 'Tables',
@@ -162,4 +160,3 @@ $(document).ready(function() {
 		}
 	}});
 });
-
