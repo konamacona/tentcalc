@@ -2,6 +2,11 @@
   margin: 5%;
 }
 
+body {
+  position: absolute;
+  top: -35px;
+}
+
 .fa {
   line-height: inherit;
 }
