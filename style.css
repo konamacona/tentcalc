@@ -6,8 +6,15 @@ body {
   position: absolute;
 }
 
+#navList {
+  margin-bottom: 20px;
+}
+
 @media (max-width: 400px) {
-  #navList { display: none; }
+  #navList {
+    margin: 0;
+    display: none;
+  }
 }
 
 .fa {
