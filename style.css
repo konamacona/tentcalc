@@ -42,3 +42,13 @@ input[type=number]::-webkit-outer-spin-button {
 .pager {
   clear: both;
 }
+
+.panel-footer {
+  padding: 0;
+}
+
+.tent-img {
+  width: 100%;
+  border-bottom-left-radius: 3px;
+  border-bottom-right-radius: 3px;
+}

@@ -40,6 +40,14 @@ var items = [
 	new Item(ITEM_GROUP.STANDING, 'Standing with Table', 8),
 ];
 
+var tents = [
+	{ size: 10*10, name: 'MQ 10x10 Tent', img: '10.jpg', desc: 'Get protection from the sun with elegent shade structures for corporate event, commercial or home use.' },
+	{ size: 20*20, name: 'MQ 20x20 Tent', img: '20.jpg', desc: 'Matrix-Marquee Party Tents make great festival tents, food service tents, retail tents, security & first aid tents, covered walkways, ticket kiosks, and portable pavilions.'},
+	{ size: 20*30, name: 'MQ 20x30 Tent', img: '23.jpg', desc: 'The Matrix-Marquee is the world\'s most functional, fast, flexible and portable tent and canopy. Available as shown with plain or cathedral window walls. Four tents are displayed here.'},
+	{ size: 30*30, name: 'MQ 30x30 Tent', img: '30.jpg', desc: 'This is the tent we used for our own son\'s reception. Plenty of room with no centre pole to the ground that allowed us to arrange the tables and chairs as we wished. I cannot say enough about how great this tent looks and functions.'},
+	{ size: 1040, name: 'MQ 40 Hexagon Tent', img: '40.jpg', desc: 'The Hexagon 40 Tent is a perfect multi-purpose outdoor event tent. The top-of-the-line materials and meticulous design make it not only a stunning event tent, but a trusted structure for heavy weather conditions that you would find in the Maritimes.' }
+];
+
 var itemsById = {};
 items.forEach(function(item) { itemsById[item.id] = item; });
 
@@ -55,6 +63,7 @@ function addTab(tabId, label, content) {
 }
 
 function generateInitialPages() {
+	// Add an intro tab
 	addTab('tabIntro', 'Introduction', `
 		<div class="jumbotron">
 			<h1>Tent Products Wizard!</h1>
@@ -62,11 +71,13 @@ function generateInitialPages() {
 		</div>`
 	);
 
+	// Add a tab for each item group
 	Object.keys(ITEM_GROUP).forEach(function(groupKey) {
 		var group = ITEM_GROUP[groupKey];
 		addTab('tab' + group, group, generateGroupOptions(group));
 	});
 
+	// Bind the input box controls to the data in the items array, the buttons are already bound
 	items.forEach(function(item) {
 		$('#' + item.id + 'Count').bind('keyup mouseup', function () {
 			item.count = parseInt($('#' + item.id + 'Count').val(), 10);
@@ -75,10 +86,12 @@ function generateInitialPages() {
 		});
 	});
 
+	// Add final page placeholder and populate it.
 	addTab('tabFinish', 'Results', '<div id="resultsTab"></div>');
 	populateResultsTab();
 }
 
+// Generates the html string for a tab for 1 item group
 function generateGroupOptions(itemGroup) {
 	var result = "";
 
@@ -113,19 +126,84 @@ function generateGroupOptions(itemGroup) {
 	return result;
 }
 
+function tentSpaceNeeded() {
+	return items.reduce(function(a, b) { return a + b.getSpaceRequired(); }, 0);
+}
+
+// Generates a list of tents they should totally rent
+function generateProductList(itemGroup) {
+	var result = "";
+	var reccomended = [];
+	var spaceNeeded = tentSpaceNeeded();
+	
+	tents.forEach(function(tent) {
+		tent.count = 0;
+	});
+	tents = tents.sort(function(a, b) {
+		return b.size - a.size;
+	});
+
+	while(spaceNeeded > 0) {
+		for(var i = 0; i < tents.length; i++) {
+			if(tents[i].size < spaceNeeded || i == tents.length - 1) {
+				spaceNeeded -= tents[i].size;
+				spaceNeeded = Math.max(spaceNeeded, 0);
+				tents[i].count ++;
+				break;
+			}
+		}
+	}
+
+	tents.forEach(function(tent) {
+		if(tent.count == 0) { return; }
+
+		var count = "";
+		if(tent.count > 1) {
+			count += tent.count + "x - ";
+		}
+
+		result += `
+			<div id="` + tent.id + `" class="tent-calc-item col-xs-12 col-sm-6 col-md-4 col-lg-3">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<label for="basic-url">` + count + tent.name + `</label>
+					</div>
+					<div class="panel-body">
+						` + tent.desc + `
+					</div>
+					<div class="panel-footer">
+						<img class="tent-img" src="/images/` + tent.img + `"></img>
+					</div>
+				</div>
+			</div>
+		`;
+	});
+
+	return result;
+}
+
 function populateResultsTab() {
 	var tab = $('#resultsTab');
 	var result = "";
+	var spaceNeeded = tentSpaceNeeded();
 
-	var tentSpaceNeeded = 0;
-	items.forEach(function(item) { tentSpaceNeeded += item.getSpaceRequired(); });
-
-	result += `
-		<div class="jumbotron">
-			<h1>You Need ` + tentSpaceNeeded + ` Square Feet of Tent Space</h1>
-			<p>See the recommended products below or begin a free quote now with some pre-selected items based on your entries!</p>
-		</div>
+	if(spaceNeeded == 0) {
+		result += `
+			<div class="jumbotron">
+				<h1>Oh No! It's an empty party!</h1>
+				<p>Add some items on the previous pages to see how much space you'll need!</p>
+			</div>
 		`;
+	} else {
+		result += `
+			<div class="jumbotron">
+				<h1>You Need ` + spaceNeeded + ` Square Feet of Tent Space</h1>
+				<p>See the recommended products below and begin a <a href="http://maritimetents.website/request-a-quote/">Free Quote</a> now!</p>
+			</div>
+			`;
+	}
+
+	result += generateProductList();
 
 	tab.html(result);
 }
