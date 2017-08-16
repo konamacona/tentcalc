@@ -172,7 +172,7 @@ function generateProductList(itemGroup) {
 						` + tent.desc + `
 					</div>
 					<div class="panel-footer">
-						<img class="tent-img" src="/images/` + tent.img + `"></img>
+						<img class="tent-img" src="./images/` + tent.img + `"></img>
 					</div>
 				</div>
 			</div>
