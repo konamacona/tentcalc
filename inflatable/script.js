@@ -19,7 +19,7 @@ function processRequests() {
 			$('#qty_' + key).val(amt).attr({
 				'value': amt,
 				'oldvalue': Math.min(0, amt - 1)
-			})
+			});
 		}
 	});
 }
