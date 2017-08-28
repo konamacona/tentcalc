@@ -271,7 +271,7 @@ function populateResultsTab() {
 		result += `
 			<div class="jumbotron">
 				<h1>You Need ` + spaceNeeded + ` Square Feet of Tent Space</h1>
-				<p>The recommended products are shown below. Begin a <a href="http://maritimetents.website/request-a-quote/?` + generateLinkParams() + `">Free Quote with these items</a> or a <a href="http://maritimetents.website/request-a-quote/?` + generateLinkParams() + `">Free Empty Quote</a> now!</p>
+				<p>The recommended products are shown below. Begin a <a href="http://maritimetents.website/request-a-quote/?` + generateLinkParams() + `">Free Quote with these items</a> or a <a href="http://maritimetents.website/request-a-quote/">Free Empty Quote</a> now!</p>
 			</div>
 			`;
 	}
