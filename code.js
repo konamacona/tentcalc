@@ -6,7 +6,7 @@ var ITEM_GROUP = {
 	STANDING: 'Standing',
 };
 
-function /* class */ Item(group, name, spacePer, note) {
+function /* class */ Item(group, name, spacePer, note, products) {
 	this.id = name.split(' ').join('');
 	this.shouldCheck = false; // Whether or not the user should be asked about this item
 	this.count = 0;
@@ -14,6 +14,8 @@ function /* class */ Item(group, name, spacePer, note) {
 	this.name = name;
 	this.note = note;
 	this.spacePerCount = spacePer;
+
+	this.products = products; 
 
 	this.getSpaceRequired = function () {
 		return this.count * this.spacePerCount;
@@ -40,16 +42,68 @@ var items = [
 	new Item(ITEM_GROUP.STANDING, 'Standing with Table', 8),
 ];
 
+function /* class */ Product(name, id, image, size, available, description) {
+	this.count = 0;
+	this.available = available;
+	this.id = id
+	this.size = size;
+	this.name = name;
+	this.image = image;
+	this.description = description;
+}
+
 var tents = [
-	{ size: 10*10, name: 'MQ 10x10 Tent', img: '10.jpg', desc: 'Get protection from the sun with elegent shade structures for corporate event, commercial or home use.' },
-	{ size: 20*20, name: 'MQ 20x20 Tent', img: '20.jpg', desc: 'Matrix-Marquee Party Tents make great festival tents, food service tents, retail tents, security & first aid tents, covered walkways, ticket kiosks, and portable pavilions.'},
-	{ size: 20*30, name: 'MQ 20x30 Tent', img: '23.jpg', desc: 'The Matrix-Marquee is the world\'s most functional, fast, flexible and portable tent and canopy. Available as shown with plain or cathedral window walls. Four tents are displayed here.'},
-	{ size: 30*30, name: 'MQ 30x30 Tent', img: '30.jpg', desc: 'This is the tent we used for our own son\'s reception. Plenty of room with no centre pole to the ground that allowed us to arrange the tables and chairs as we wished. I cannot say enough about how great this tent looks and functions.'},
-	{ size: 1040, name: 'MQ 40 Hexagon Tent', img: '40.jpg', desc: 'The Hexagon 40 Tent is a perfect multi-purpose outdoor event tent. The top-of-the-line materials and meticulous design make it not only a stunning event tent, but a trusted structure for heavy weather conditions that you would find in the Maritimes.' }
+	new Product('MQ 10x10 Tent', '207116', '10.jpg', 10*10, 2, 'Get protection from the sun with elegent shade structures for corporate event, commercial or home use.'),
+	new Product('MQ 20x20 Tent', '207182', '20.jpg', 20*20, 6, 'Matrix-Marquee Party Tents make great festival tents, food service tents, retail tents, security & first aid tents, covered walkways, ticket kiosks, and portable pavilions.'),
+	new Product('MQ 20x30 Tent', '207186', '23.jpg', 20*30, 3, 'The Matrix-Marquee is the world\'s most functional, fast, flexible and portable tent and canopy. Available as shown with plain or cathedral window walls. Four tents are displayed here.'),
+	new Product('MQ 30x30 Tent', '207188', '30.jpg', 30*30, 4, 'This is the tent we used for our own son\'s reception. Plenty of room with no centre pole to the ground that allowed us to arrange the tables and chairs as we wished. I cannot say enough about how great this tent looks and functions.'),
+	new Product('MQ 40 Hexagon Tent', '207206', '40.jpg', 1040, 2, 'The Hexagon 40 Tent is a perfect multi-purpose outdoor event tent. The top-of-the-line materials and meticulous design make it not only a stunning event tent, but a trusted structure for heavy weather conditions that you would find in the Maritimes.'),
 ];
+
+var otherProducts = [
+	new Product('Fan Back Chair White', '207480', 'fanback.jpg', null, 488, 'Folding Fan Back chairs are ideal to be used for indoor or outdoor parties. Available in white.'),
+	new Product('White Resin Chair with seating pad', '207482', 'whiteresin.jpg', null, 444, 'White Resin Folding Chairs with comfort seating pad. Made to be sturdier and more comfortable than regular rental chairs. We recommend these for your VIPs.'),
+	new Product('Six Foot Banquet Table', '207516', 'banquet.jpg', null, 150, 'Our 6\' Banquet Tables are great for seating up to 8 people. They can also be used for buffet lines, DJ Service, Head Table, or guest book.'),
+	new Product('Sixty Inch Round Table', '207510', 'round.jpg', null, 76, 'Accommodate up to 8 people at each table.'),
+	new Product('Twenty Foot Squared Dance Floor', '207490', 'dance.jpg', null, 2, 'This 20\' X 20\' Portable Dance Floor comes in Wood grain with silver trim. This size can easily fit 40 couples. This Portable dance floor can be used indoors or outdoors. It is recommended to use a plywood subfloor if setting up dance floor on uneven ground.')
+]
+
+// Represents a relationship between an item and a product
+function ProductItemPair(itemId, productId, productPerItem) {
+	this.item = itemId;
+	this.product = productId;
+	this.productPerItem = productPerItem;
+
+	this.getProductCount = function (items) {
+		return Math.ceil(items * productPerItem);
+	}
+}
+
+var productItemPairs = [
+	new ProductItemPair('BanquetTable', '207516', 1 / 8), // Rect Banquet Table
+	new ProductItemPair('BanquetTable', '207480', 1), // White Fan-back chairs
+	new ProductItemPair('RoundTable', '207510', 1 / 8), // Round Table
+	new ProductItemPair('RoundTable', '207480', 1), // White Fan-back chairs
+	new ProductItemPair('HeadTable', '207516', 1 / 4), // Rect Banquet Table
+	new ProductItemPair('HeadTable', '207482', 1), // White Resin Padded Chairs
+	new ProductItemPair('RowSeating', '207480', 1), // White Fan-back chairs
+	new ProductItemPair('BuffetTables', '207516', 1), // Rect Banquet Table
+	new ProductItemPair('FourFootCakeTables', '207510', 1), // Round Table
+	new ProductItemPair('FourFootBeverageTables', '207510', 1), // Round Table
+	new ProductItemPair('DiscJockeyArea', '207516', 1), // Rect Banquet Table
+	new ProductItemPair('DanceFloor', '207490', 1 / 80), // Dance Floor
+	new ProductItemPair('GiftTables', '207516', 1), // Rect Banquet Table
+	new ProductItemPair('GuestBookTables', '207510', 1), // Round Table
+	new ProductItemPair('OtherTableSmall', '207510', 1), // Round Table
+	new ProductItemPair('OtherTableLarge', '207516', 1), // Rect Banquet Table
+]
 
 var itemsById = {};
 items.forEach(function(item) { itemsById[item.id] = item; });
+
+var productsById = {};
+tents.forEach(function(tent) { productsById[tent.id] = tent; });
+otherProducts.forEach(function(product) { productsById[product.id] = product; });
 
 /* Adds a tab to the navigation */
 function addTab(tabId, label, content) {
@@ -67,7 +121,7 @@ function generateInitialPages() {
 	addTab('tabIntro', 'Introduction', `
 		<div class="jumbotron">
 			<h1>Tent Products Wizard!</h1>
-			<p>This wizrd will guide you through a process to determine how much tent space you will need and what products you may want to rent from Maritime Tents!</p>
+			<p>This wizard will guide you through a process to determine how much tent space you will need and what products you may want to rent from Maritime Tents!</p>
 		</div>`
 	);
 
@@ -131,13 +185,15 @@ function tentSpaceNeeded() {
 }
 
 // Generates a list of tents they should totally rent
-function generateProductList(itemGroup) {
+function generateProductList() {
 	var result = "";
 	var reccomended = [];
 	var spaceNeeded = tentSpaceNeeded();
 	
-	tents.forEach(function(tent) {
-		tent.count = 0;
+	var combinedProducts = tents.concat(otherProducts);
+
+	combinedProducts.forEach(function(product) {
+		product.count = 0;
 	});
 	tents = tents.sort(function(a, b) {
 		return b.size - a.size;
@@ -145,7 +201,7 @@ function generateProductList(itemGroup) {
 
 	while(spaceNeeded > 0) {
 		for(var i = 0; i < tents.length; i++) {
-			if(tents[i].size < spaceNeeded || i == tents.length - 1) {
+			if(tents[i].available > tents[i].count && (tents[i].size < spaceNeeded || i == tents.length - 1)) {
 				spaceNeeded -= tents[i].size;
 				spaceNeeded = Math.max(spaceNeeded, 0);
 				tents[i].count ++;
@@ -154,25 +210,30 @@ function generateProductList(itemGroup) {
 		}
 	}
 
-	tents.forEach(function(tent) {
-		if(tent.count == 0) { return; }
+	productItemPairs.forEach(function(pair) {
+		if(itemsById[pair.item].count <= 0) { return; }
+		productsById[pair.product].count += pair.getProductCount(itemsById[pair.item].count);
+	});
+
+	combinedProducts.forEach(function(product) {
+		if(product.count == 0) { return; }
 
 		var count = "";
-		if(tent.count > 1) {
-			count += tent.count + "x - ";
+		if(product.count > 1) {
+			count += product.count + "x - ";
 		}
 
 		result += `
-			<div id="` + tent.id + `" class="tent-calc-item col-xs-12 col-sm-6 col-md-4 col-lg-3">
+			<div id="` + product.id + `" class="tent-calc-item col-xs-12 col-sm-6 col-md-4 col-lg-3">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<label for="basic-url">` + count + tent.name + `</label>
+						<label for="basic-url">` + count + product.name + `</label>
 					</div>
 					<div class="panel-body">
-						` + tent.desc + `
+						` + product.description + `
 					</div>
 					<div class="panel-footer">
-						<img class="tent-img" src="./images/` + tent.img + `"></img>
+						<img class="tent-img" src="./images/` + product.image + `"></img>
 					</div>
 				</div>
 			</div>
@@ -182,10 +243,22 @@ function generateProductList(itemGroup) {
 	return result;
 }
 
+function generateLinkParams() {
+	var result = "";
+	tents.concat(otherProducts).forEach(function(product) {
+		if(product.count > 0) {
+			result += '&' + product.id + '=' + product.count;
+		}
+	});
+	return result;
+}
+
 function populateResultsTab() {
 	var tab = $('#resultsTab');
 	var result = "";
 	var spaceNeeded = tentSpaceNeeded();
+
+	var productList = generateProductList();
 
 	if(spaceNeeded == 0) {
 		result += `
@@ -198,12 +271,12 @@ function populateResultsTab() {
 		result += `
 			<div class="jumbotron">
 				<h1>You Need ` + spaceNeeded + ` Square Feet of Tent Space</h1>
-				<p>See the recommended products below and begin a <a href="http://maritimetents.website/request-a-quote/">Free Quote</a> now!</p>
+				<p>The recommended products are shown below. Begin a <a href="http://maritimetents.website/request-a-quote/?` + generateLinkParams() + `">Free Quote with these items</a> or a <a href="http://maritimetents.website/request-a-quote/?` + generateLinkParams() + `">Free Empty Quote</a> now!</p>
 			</div>
 			`;
 	}
 
-	result += generateProductList();
+	result += productList;
 
 	tab.html(result);
 }
