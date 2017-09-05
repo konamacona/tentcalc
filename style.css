@@ -13,9 +13,16 @@ body {
 }
 
 @media (max-width: 400px) {
-  #navList {
+  .container {
+    height: 0;
+  }
+  #navList li a {
+    display: block;
+    width: 0;
+    height: 0;
+    padding: 0;
     margin: 0;
-    display: none;
+    visibility: hidden;
   }
 }
 
