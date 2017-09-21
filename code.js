@@ -105,6 +105,25 @@ var productsById = {};
 tents.forEach(function(tent) { productsById[tent.id] = tent; });
 otherProducts.forEach(function(product) { productsById[product.id] = product; });
 
+function /* class */ PackageItem(id, count, specialName) {
+	this.product = productsById[id];
+	this.count = count || 1;
+	this.specialName = specialName;
+}
+function /* class */ Package(id, name, products) {
+	this.id = id
+	this.name = name;
+	this.products = products;
+}
+var packages = [
+	new Package('wed80', 'Wedding Reception 80 Guests', [new PackageItem('207188'), new PackageItem('207480', 80), new PackageItem('207510', 10), new PackageItem('207516', 1, 'Buffet Table')]),
+	new Package('wed100', 'Wedding Reception 100 Guests', [new PackageItem('207186', 2), new PackageItem('207480', 100), new PackageItem('207510', 13), new PackageItem('207516', 1, 'Buffet Table')]),
+	new Package('wed120', 'Wedding Reception 120 Guests', [new PackageItem('207188', 2), new PackageItem('207480', 120), new PackageItem('207510', 15), new PackageItem('207516', 2, 'Buffet Table')]),
+	new Package('wed150', 'Wedding Reception 150 Guests', [new PackageItem('207186', 4), new PackageItem('207480', 150), new PackageItem('207510', 19), new PackageItem('207516', 3, 'Buffet Table')]),
+	new Package('wed175', 'Wedding Reception 175 Guests', [new PackageItem('207186', 4), new PackageItem('207480', 175), new PackageItem('207510', 22), new PackageItem('207516', 4, 'Buffet Table')]),
+	new Package('wed200', 'Wedding Reception 200 Guests', [new PackageItem('207186', 5), new PackageItem('207480', 200), new PackageItem('207510', 25), new PackageItem('207516', 4, 'Buffet Table')])
+]
+
 /* Adds a tab to the navigation */
 function addTab(tabId, label, content) {
 	$('#navList').append(
@@ -122,7 +141,8 @@ function generateInitialPages() {
 		<div class="jumbotron">
 			<h1>Tent Products Wizard!</h1>
 			<p>This wizard will guide you through a process to determine how much tent space you will need and what products you may want to rent from Maritime Tents!</p>
-		</div>`
+			<p>You can also choose one of our packages below and begin a quote with the package items!</p>
+		</div>` + generatePackageList()
 	);
 
 	// Add a tab for each item group
@@ -253,6 +273,16 @@ function generateLinkParams() {
 	return result;
 }
 
+function generateLinkParamsPackage(package) {
+	var result = "";
+	package.products.forEach(function(product) {
+		if(product.count > 0) {
+			result += '&' + product.product.id + '=' + product.count;
+		}
+	});
+	return result;
+}
+
 function populateResultsTab() {
 	var tab = $('#resultsTab');
 	var result = "";
@@ -293,6 +323,47 @@ function addCount(itemId, value) {
 	item.count += value;
 	item.count = Math.max(item.count, 0);
 	$('#' + item.id + 'Count').val(item.count);
+}
+
+
+// Generates a list of tents they should totally rent
+function generatePackageList() {
+	var result = "";
+
+	packages.forEach(function(package) {
+		var productList = "<ul>";
+		console.log(package);
+		package.products.forEach(function(product) {
+			console.log()
+
+			productList += "<li>";
+			if(product.count > 1) productList += product.count + " x ";
+			productList += product.specialName || product.product.name;
+			productList += "</li>";
+		});
+		productList += "</ul>";
+
+		var linkParams = generateLinkParamsPackage(package);
+
+		result += `
+			<div id="` + package.id + `" class="tent-calc-item col-xs-12 col-sm-6 col-md-4 col-lg-3">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<label for="basic-url">` + package.name + `</label>
+					</div>
+					<div class="panel-body">
+						` + productList + `
+						<br>
+						<a class="btn btn-primary startQuoteBtn" href="http://maritimetents.website/request-a-quote/?` + linkParams + `" target="_top">Start a Quote</a>
+					</div>
+				</div>
+			</div>
+		`;
+	});
+
+	
+
+	return result;
 }
 
 //basic wizard w/ progress

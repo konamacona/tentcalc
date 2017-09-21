@@ -4,6 +4,9 @@
 }
 */
 
+
+
+
 body {
   position: absolute;
 }
@@ -60,4 +63,12 @@ input[type=number]::-webkit-outer-spin-button {
   width: 100%;
   border-bottom-left-radius: 3px;
   border-bottom-right-radius: 3px;
+}
+
+.startQuoteBtn {
+  float: right;
+}
+
+.nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus, .progress-bar, .btn-primary {
+  background-color:#1276ba
 }
