@@ -23,21 +23,22 @@ function /* class */ Item(group, name, spacePer, note, products) {
 }
 
 var items = [
-	new Item(ITEM_GROUP.SEATING, 'Banquet Table', 12, '# of People'),
-	new Item(ITEM_GROUP.SEATING, 'Round Table', 10, '# of People'),
-	new Item(ITEM_GROUP.SEATING, 'Row Seating', 6, '# of People'),
-	new Item(ITEM_GROUP.SEATING, 'Head Table', 20, '# of People'),
-	new Item(ITEM_GROUP.FOOD, 'Buffet Tables', 100),
-	new Item(ITEM_GROUP.FOOD, 'Four Foot Cake Tables', 50),
-	new Item(ITEM_GROUP.FOOD, 'Four Foot Beverage Tables', 50),
-	new Item(ITEM_GROUP.FOOD, 'Bars', 150, 'Supports ~140 People w/ 2 Bartenders'),
-	new Item(ITEM_GROUP.MUSIC, 'Disc Jockey Area', 100, '# of DJs'),
-	new Item(ITEM_GROUP.MUSIC, 'Band', 35, '# of Members'),
-	new Item(ITEM_GROUP.MUSIC, 'Dance Floor', 3, '# of People'),
-	new Item(ITEM_GROUP.OTHER_TABLES, 'Gift Tables', 100),
-	new Item(ITEM_GROUP.OTHER_TABLES, 'Guest Book Tables', 50),
-	new Item(ITEM_GROUP.OTHER_TABLES, 'Other Table Small', 50, '(X-Y Feet)'),
-	new Item(ITEM_GROUP.OTHER_TABLES, 'Other Table Large', 100, '(Y-Z Feet)'),
+	new Item(ITEM_GROUP.SEATING, 'Banquet Table', 12, 'How many people would you like seated at a banquet table?'),
+	new Item(ITEM_GROUP.SEATING, 'Round Table', 10, 'How many people would you like seated at a round table?'),
+	new Item(ITEM_GROUP.SEATING, 'Row Seating', 6, 'How many people would you like seated in row seating?'),
+	new Item(ITEM_GROUP.SEATING, 'Head Table', 20, 'How many people would you like seated at the head table?'),
+	new Item(ITEM_GROUP.FOOD, 'Buffet Tables', 100, 'How many buffet tables do you need?'),
+	new Item(ITEM_GROUP.FOOD, 'Four Foot Cake Tables', 50, 'How many cake tables do you need?'),
+	new Item(ITEM_GROUP.FOOD, 'Four Foot Beverage Tables', 50, 'How many beverage tables do you need?'),
+	new Item(ITEM_GROUP.FOOD, 'Bars', 150, 'How many bars do you need? One bar supports ~140 People w/ 2 Bartenders'),
+	new Item(ITEM_GROUP.MUSIC, 'Disc Jockey Area', 100, 'How many DJ areas would you like set up?'),
+	new Item(ITEM_GROUP.MUSIC, 'Band', 35, 'If having a band, how many members do they have?'),
+	new Item(ITEM_GROUP.MUSIC, 'Dance Floor', 3, 'How many people are you expecting at your dance?'),
+	new Item(ITEM_GROUP.OTHER_TABLES, 'Gift Tables', 100, 'How many gift tables do you need?'),
+	new Item(ITEM_GROUP.OTHER_TABLES, 'Guest Book Tables', 50, 'How many guestbook tables do you need?'),
+//TODO: get size of these tables
+	new Item(ITEM_GROUP.OTHER_TABLES, 'Other Table Small', 50, 'How many small tables do you need?'),
+	new Item(ITEM_GROUP.OTHER_TABLES, 'Other Table Large', 100, 'How many large tables do you need?'),
 	new Item(ITEM_GROUP.STANDING, 'Standing without Table', 10),
 	new Item(ITEM_GROUP.STANDING, 'Standing with Table', 8),
 ];
@@ -53,7 +54,7 @@ function /* class */ Product(name, id, image, size, available, description) {
 }
 
 var tents = [
-	new Product('MQ 10x10 Tent', '207116', '10.jpg', 10*10, 2, 'Get protection from the sun with elegent shade structures for corporate event, commercial or home use.'),
+	new Product('MQ 10x10 Tent', '207116', '10.jpg', 10*10, 2, 'Get protection from the sun with elegant shade structures for corporate event, commercial or home use.'),
 	new Product('MQ 20x20 Tent', '207182', '20.jpg', 20*20, 6, 'Matrix-Marquee Party Tents make great festival tents, food service tents, retail tents, security & first aid tents, covered walkways, ticket kiosks, and portable pavilions.'),
 	new Product('MQ 20x30 Tent', '207186', '23.jpg', 20*30, 3, 'The Matrix-Marquee is the world\'s most functional, fast, flexible and portable tent and canopy. Available as shown with plain or cathedral window walls. Four tents are displayed here.'),
 	new Product('MQ 30x30 Tent', '207188', '30.jpg', 30*30, 4, 'This is the tent we used for our own son\'s reception. Plenty of room with no centre pole to the ground that allowed us to arrange the tables and chairs as we wished. I cannot say enough about how great this tent looks and functions.'),
@@ -139,9 +140,9 @@ function generateInitialPages() {
 	// Add an intro tab
 	addTab('tabIntro', 'Introduction', `
 		<div class="jumbotron">
-			<h1>Tent Products Wizard!</h1>
-			<p>This wizard will guide you through a process to determine how much tent space you will need and what products you may want to rent from Maritime Tents!</p>
-			<p>You can also choose one of our packages below and begin a quote with the package items!</p>
+			<h1>Tent Recommendation Calculator!</h1>
+			<p>Looking for the right tents and accessories for your event but not quite sure what you need? We&#39;re here to help! The calculator will determine how much tent space you will need and what products you may want to rent, all you need to do is click &quot;Next&quot; to begin.</p>
+			<p>Having a wedding? Review our wedding packages and if you find one you like, begin a quote right away!</p>
 		</div>` + generatePackageList()
 	);
 
@@ -301,7 +302,7 @@ function populateResultsTab() {
 		result += `
 			<div class="jumbotron">
 				<h1>You Need ` + spaceNeeded + ` Square Feet of Tent Space</h1>
-				<p>The recommended products are shown below. Begin a <a href="http://maritimetents.website/request-a-quote/?` + generateLinkParams() + `" target="_top">Free Quote with these items</a> or a <a href="http://maritimetents.website/request-a-quote/" target="_top">Free Empty Quote</a> now!</p>
+				<p>The recommended products are shown below. <a href="http://maritimetents.website/request-a-quote/?` + generateLinkParams() + `" target="_top">Click here</a> to begin a free quote with these items or a <a href="http://maritimetents.website/request-a-quote/" target="_top">Free Empty Quote</a> now!</p>
 			</div>
 			`;
 	}
