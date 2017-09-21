@@ -354,7 +354,8 @@ function generatePackageList() {
 					<div class="panel-body">
 						` + productList + `
 						<br>
-						<a class="btn btn-primary startQuoteBtn" href="http://maritimetents.website/request-a-quote/?` + linkParams + `" target="_top">Start a Quote</a>
+						<a class="btn btn-primary startQuoteBtnLeft" href="http://maritimetents.website/request-a-quote/?` + linkParams + `" target="_top">Start a Quote</a>
+						<a class="btn btn-primary startQuoteBtnRight" href="http://maritimetents.website/request-a-quote/?` + linkParams + `" target="_top">Start a Quote</a>
 					</div>
 				</div>
 			</div>

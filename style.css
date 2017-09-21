@@ -65,10 +65,28 @@ input[type=number]::-webkit-outer-spin-button {
   border-bottom-right-radius: 3px;
 }
 
-.startQuoteBtn {
+.startQuoteBtnLeft {
+  float: left;
+}
+.startQuoteBtnRight {
   float: right;
 }
 
 .nav-pills>li.active>a, .nav-pills>li.active>a:hover, .nav-pills>li.active>a:focus, .progress-bar, .btn-primary {
   background-color:#1276ba
+}
+
+.pager li>a, .pager li>span {
+  color: white;
+  background-color: #1276ba;
+  border-color: transparent;
+  border-radius: 5px;
+}
+
+.pager li>a:hover, .pager li>a:focus {
+  background-color: #1276ba;
+}
+
+.pager .disabled>a, .pager .disabled>a:hover, .pager .disabled>a:focus, .pager .disabled>span,.pager li>a:hover {
+  border-color: #285e8e;
 }
