@@ -327,15 +327,13 @@ function addCount(itemId, value) {
 }
 
 
-// Generates a list of tents they should totally rent
+// Generates a list of packages
 function generatePackageList() {
 	var result = "";
 
 	packages.forEach(function(package) {
 		var productList = "<ul>";
-		console.log(package);
 		package.products.forEach(function(product) {
-			console.log()
 
 			productList += "<li>";
 			if(product.count > 1) productList += product.count + " x ";
