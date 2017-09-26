@@ -140,10 +140,10 @@ function generateInitialPages() {
 	// Add an intro tab
 	addTab('tabIntro', 'Introduction', `
 		<div class="jumbotron">
-			<h1>Tent Recommendation Calculator!</h1>
+			<h1>Tent Size Calculator!</h1>
 			<p>Looking for the right tents and accessories for your event but not quite sure what you need? We&#39;re here to help! The calculator will determine how much tent space you will need and what products you may want to rent, all you need to do is click &quot;Next&quot; to begin.</p>
 			<p>Having a wedding? Review our wedding packages and if you find one you like, begin a quote right away!</p>
-		</div>` + generatePackageList()
+		</div>` + getButtons() + generatePackageList()
 	);
 
 	// Add a tab for each item group
@@ -162,13 +162,13 @@ function generateInitialPages() {
 	});
 
 	// Add final page placeholder and populate it.
-	addTab('tabFinish', 'Results', '<div id="resultsTab"></div>');
+	addTab('tabFinish', 'Results', '<div id="resultsTab"></div>' + getButtons());
 	populateResultsTab();
 }
 
 // Generates the html string for a tab for 1 item group
 function generateGroupOptions(itemGroup) {
-	var result = "";
+	var result = getButtons() + `<div class="tent-item-container">`;
 
 	items.forEach(function(item) {
 		if(item.group !== itemGroup) {
@@ -178,7 +178,7 @@ function generateGroupOptions(itemGroup) {
 		var note = item.note || "";
 
 		var itemText = `
-			<div id="` + item.id + `" class="tent-calc-item col-xs-12 col-sm-6 col-md-4 col-lg-3">
+			<div id="` + item.id + `" class="tent-calc-item">
 				<div class="panel panel-default">
 				<div class="panel-heading"><label for="basic-url">` + item.name + `</label></div>
 				<div class="panel-body">
@@ -197,6 +197,8 @@ function generateGroupOptions(itemGroup) {
 		`;
 		result += itemText;
 	})
+
+	result += `</div>`;
 
 	return result;
 }
@@ -221,13 +223,19 @@ function generateProductList() {
 	});
 
 	while(spaceNeeded > 0) {
+		var changed = false;
 		for(var i = 0; i < tents.length; i++) {
 			if(tents[i].available > tents[i].count && (tents[i].size < spaceNeeded || i == tents.length - 1)) {
+				changed = true;
 				spaceNeeded -= tents[i].size;
 				spaceNeeded = Math.max(spaceNeeded, 0);
 				tents[i].count ++;
 				break;
 			}
+		}
+		if(!changed) {
+			console.error('force breaking loop')
+			break;
 		}
 	}
 
@@ -329,12 +337,11 @@ function addCount(itemId, value) {
 
 // Generates a list of packages
 function generatePackageList() {
-	var result = "";
+	var result = '<div class="tent-item-container">';
 
 	packages.forEach(function(package) {
 		var productList = "<ul>";
 		package.products.forEach(function(product) {
-
 			productList += "<li>";
 			if(product.count > 1) productList += product.count + " x ";
 			productList += product.specialName || product.product.name;
@@ -345,7 +352,7 @@ function generatePackageList() {
 		var linkParams = generateLinkParamsPackage(package);
 
 		result += `
-			<div id="` + package.id + `" class="tent-calc-item col-xs-12 col-sm-6 col-md-4 col-lg-3">
+			<div id="` + package.id + `" class="tent-calc-item">
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<label for="basic-url">` + package.name + `</label>
@@ -360,9 +367,19 @@ function generatePackageList() {
 		`;
 	});
 
-	
+	result += '</div>';
 
 	return result;
+}
+
+function getButtons() {
+	return `
+	<ul class="pager wizard">
+		<li class="previous"><a href="#" class="">Previous</a></li>
+		<li class="next"><a href="#" class="">Next</a></li>
+	</ul>
+	`;
+	return '';
 }
 
 //basic wizard w/ progress
