@@ -143,7 +143,7 @@ function generateInitialPages() {
 			<h1>Tent Size Calculator!</h1>
 			<p>Looking for the right tents and accessories for your event but not quite sure what you need? We&#39;re here to help! The calculator will determine how much tent space you will need and what products you may want to rent, all you need to do is click &quot;Next&quot; to begin.</p>
 			<p>Having a wedding? Review our wedding packages and if you find one you like, begin a quote right away!</p>
-		</div>` + getButtons() + generatePackageList()
+		</div>` + getButtons()//+ generatePackageList()
 	);
 
 	// Add a tab for each item group
