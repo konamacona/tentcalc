@@ -141,8 +141,7 @@ function generateInitialPages() {
 	addTab('tabIntro', 'Introduction', `
 		<div class="jumbotron">
 			<h1>Tent Size Calculator!</h1>
-			<p>Looking for the right tents and accessories for your event but not quite sure what you need? We&#39;re here to help! The calculator will determine how much tent space you will need and what products you may want to rent, all you need to do is click &quot;Next&quot; to begin.</p>
-			<p>Having a wedding? Review our wedding packages and if you find one you like, begin a quote right away!</p>
+			<p>Looking for the right tents and accessories for your event but not quite sure what you need? We&#39;re here to help! The calculator will determine how much tent space you will need, all you need to do is click &quot;Next&quot; to begin.</p>
 		</div>` + getButtons()//+ generatePackageList()
 	);
 
@@ -310,12 +309,12 @@ function populateResultsTab() {
 		result += `
 			<div class="jumbotron">
 				<h1>You Need ` + spaceNeeded + ` Square Feet of Tent Space</h1>
-				<p>The recommended products are shown below. <a href="http://maritimetents.website/request-a-quote/?` + generateLinkParams() + `" target="_top">Click here</a> to begin a free quote with these items or a <a href="http://maritimetents.website/request-a-quote/" target="_top">Free Empty Quote</a> now!</p>
+				<p><a href="http://maritimetents.website/request-a-quote/" target="_top">Click here</a> to begin a free quote now!</p>
 			</div>
 			`;
 	}
 
-	result += productList;
+	// result += productList;
 
 	tab.html(result);
 }
