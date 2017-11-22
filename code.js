@@ -125,6 +125,40 @@ var packages = [
 	new Package('wed200', 'Wedding Reception 200 Guests', [new PackageItem('207186', 5), new PackageItem('207480', 200), new PackageItem('207510', 25), new PackageItem('207516', 4, 'Buffet Table')])
 ]
 
+
+
+// var tents = [
+// 	new Product('MQ 10x10 Tent', '207116', '10.jpg', 10*10, 2, 'Get protection from the sun with elegant shade structures for corporate event, commercial or home use.'),
+// 	new Product('MQ 20x20 Tent', '207182', '20.jpg', 20*20, 6, 'Matrix-Marquee Party Tents make great festival tents, food service tents, retail tents, security & first aid tents, covered walkways, ticket kiosks, and portable pavilions.'),
+// 	new Product('MQ 20x30 Tent', '207186', '23.jpg', 20*30, 3, 'The Matrix-Marquee is the world\'s most functional, fast, flexible and portable tent and canopy. Available as shown with plain or cathedral window walls. Four tents are displayed here.'),
+// 	new Product('MQ 30x30 Tent', '207188', '30.jpg', 30*30, 4, 'This is the tent we used for our own son\'s reception. Plenty of room with no centre pole to the ground that allowed us to arrange the tables and chairs as we wished. I cannot say enough about how great this tent looks and functions.'),
+// 	new Product('MQ 40 Hexagon Tent', '207206', '40.jpg', 1040, 2, 'The Hexagon 40 Tent is a perfect multi-purpose outdoor event tent. The top-of-the-line materials and meticulous design make it not only a stunning event tent, but a trusted structure for heavy weather conditions that you would find in the Maritimes.'),
+// ];
+
+function /* class */ Configuration(id, name, products, footage, description) {
+	this.id = id;
+	this.name = 'Tent Configuration: ' + name;
+	this.products = products;
+	this.size = footage;
+	this.image = id + '.png';
+	this.count = 0;
+	this.description = description;
+}
+var configs = [
+	new Configuration('20x20', '20x20', ['207182'], 400),
+	new Configuration('20x30', '20x30', ['207186'], 600),
+	new Configuration('2x20x20', '40x20', ['207182', '207182'], 800, 'Two of our fantastic 20x20 Tents side by side!'),
+	new Configuration('30x30', '30x30', ['207188'], 900),
+	new Configuration('Hex', 'Hex', ['207206'], 1035),
+	new Configuration('2x20x30', '40x30', ['207186', '207186'], 1200, 'Two of our fantastic 20x30 Tents side by side!'),
+	new Configuration('3x20x20', '60x20', ['207182', '207182', '207182'], 1200, 'Three of our fantastic 20x20 Tents side by side!'),
+	new Configuration('H+20x20', 'Hex + 20x20', ['207182', '207206'], 1435, 'One of our beautiful Hexagon tents with an attached 20x20 Tent by it\'s side!'),
+	new Configuration('H+2x20x20', 'Hex + 20x20 + 20x20', ['207182', '207182', '207206'], 1835, 'One of our beautiful Hexagon tents with two attached 20x20 Tents!'),
+	new Configuration('2x30x30', '60x30', ['207188', '207188'], 1800, 'Two of our fantastic 30x30 Tents side by side!'),
+	new Configuration('2x30x30+20x30', '80x30', ['207188', '207188', '207182'], 2400, 'Two of our fantastic 30x30 Tents, with a 20x30 in between!'),
+	new Configuration('2xH+20x20', '2 Hex + 20x20', ['207182', '207206', '207206'], 2470, 'Two of our beautiful Hexagon tents with an attached 20x20 Tent!'),
+];
+
 /* Adds a tab to the navigation */
 function addTab(tabId, label, content) {
 	$('#navList').append(
@@ -213,28 +247,32 @@ function generateProductList() {
 	var spaceNeeded = tentSpaceNeeded();
 	
 	var combinedProducts = tents.concat(otherProducts);
-
 	combinedProducts.forEach(function(product) {
 		product.count = 0;
 	});
-	tents = tents.sort(function(a, b) {
-		return b.size - a.size;
-	});
+	configs.forEach(config => config.count = 0)
 
-	while(spaceNeeded > 0) {
-		var changed = false;
-		for(var i = 0; i < tents.length; i++) {
-			if(tents[i].available > tents[i].count && (tents[i].size < spaceNeeded || i == tents.length - 1)) {
-				changed = true;
-				spaceNeeded -= tents[i].size;
-				spaceNeeded = Math.max(spaceNeeded, 0);
-				tents[i].count ++;
-				break;
+	var config = null;
+	var tmp;
+	for(var i = 0; i < configs.length; i++) {
+		tmp = configs[i];
+		if(tmp.size > spaceNeeded) {
+			if(!config){
+				config = tmp;
 			}
-		}
-		if(!changed) {
-			console.error('force breaking loop')
 			break;
+		}
+	}
+
+	if(config) {
+		config.count ++;
+		config.products.forEach(productId => {
+			if(productsById[productId]) {
+				productsById[productId].count += 1;
+			}
+		});
+		if (config.description) {
+			combinedProducts.unshift(config);
 		}
 	}
 
@@ -248,7 +286,7 @@ function generateProductList() {
 
 		var count = "";
 		if(product.count > 1) {
-			count += product.count + "x - ";
+			count += product.count + "x - 	";
 		}
 
 		result += `
@@ -305,16 +343,22 @@ function populateResultsTab() {
 				<p>Add some items on the previous pages to see how much space you'll need!</p>
 			</div>
 		`;
+	} else if (spaceNeeded > configs[configs.length - 1].size) {
+		result += `
+			<div class="jumbotron">
+				<h1>You Need ` + spaceNeeded + ` Square Feet of Tent Space</h1>
+				<p>Whoa, that's a big party! None of our default configurations are large enough, please <a href="http://maritimetents.website//contact-us/">contact us</a> and we can find a custom solution! Or <a href="http://maritimetents.website/request-a-quote/" target="_top">Click here</a> to begin a free quote now and build your own custom configuration!</p>
+			</div>
+			`;
 	} else {
 		result += `
 			<div class="jumbotron">
 				<h1>You Need ` + spaceNeeded + ` Square Feet of Tent Space</h1>
-				<p><a href="http://maritimetents.website/request-a-quote/" target="_top">Click here</a> to begin a free quote now!</p>
+				<p>The recommended products are shown below. <a href="http://maritimetents.website/request-a-quote/?` + generateLinkParams() + `" target="_top">Click here</a> to begin a free quote with these items or a <a href="http://maritimetents.website/request-a-quote/" target="_top">Free Empty Quote</a> now!</p>
 			</div>
 			`;
+		result += productList;
 	}
-
-	// result += productList;
 
 	tab.html(result);
 }
